@@ -1,0 +1,132 @@
+import java.util.*;
+
+public class SnakesLadders {
+    public static int sq, sq1, sq2;
+    public static int playerold = 2, playernew = 1;
+
+    public SnakesLadders() {
+    }
+
+    public static int getSq1() {
+        return sq1;
+    }  //геттер последнего хода первого игрока
+
+    public static void setSq1(int sq1) {
+        SnakesLadders.sq1 = sq1;
+    }  //сеттер последнего хода первого игрока
+
+    public static int getSq2() { return sq2; }  //геттер последнего хода второго игрока
+
+    public static void setSq2(int sq2) { SnakesLadders.sq2 = sq2; } //сеттер последнего хода второго игрока
+
+    public static int getPlayer() { return playernew; } // геттер текущего игрока
+
+    public static void setPlayer(int playerold, int playernew) {
+        SnakesLadders.playerold = playerold;   // сеттер текущего игрока
+        SnakesLadders.playernew = playernew;     // сеттер следующего игрока
+    }
+
+    public static int snake(int die) {      // метод проверки хода на клетке "змея"
+
+        HashMap<Integer, Integer> snake = new HashMap<>();
+        snake.put(16, 6);
+        snake.put(46, 25);
+        snake.put(49, 11);
+        snake.put(62, 19);
+        snake.put(64, 60);
+        snake.put(74, 53);
+        snake.put(89, 68);
+        snake.put(92, 88);
+        snake.put(95, 75);
+        snake.put(99, 80);
+        for (Map.Entry<Integer, Integer> pair : snake.entrySet()
+        ) {
+            Integer key = pair.getKey();
+            Integer value = pair.getValue();
+            if (die == key) {
+                sq = value;
+                return sq;
+            }
+        }
+        return die;
+    }
+
+    public static int ladder(int die) {    // метод проверки хода на клетке "лестница"
+        HashMap<Integer, Integer> ladder = new HashMap<>();
+        ladder.put(2, 38);
+        ladder.put(7, 14);
+        ladder.put(8, 31);
+        ladder.put(15, 26);
+        ladder.put(21, 42);
+        ladder.put(28, 84);
+        ladder.put(36, 44);
+        ladder.put(51, 67);
+        ladder.put(71, 91);
+        ladder.put(78, 98);
+        ladder.put(87, 94);
+        for (Map.Entry<Integer, Integer> pair : ladder.entrySet()
+        ) {
+            Integer key = pair.getKey();
+            Integer value = pair.getValue();
+            if (die == key) {
+                sq = value;
+                return sq;
+            }
+        }
+        return die;
+    }
+
+    public String play(int die1, int die2) {
+
+        // проверка на достижение конца игры -> начать новую игру
+        if (sq1 == 100 && SnakesLadders.getPlayer()== 2){ setPlayer(1, 1);  SnakesLadders.setSq1(0);SnakesLadders.setSq2(0);  return "Game over!"; }
+        if (sq1 == 100 && SnakesLadders.getPlayer()== 1){ setPlayer(1, 1);  SnakesLadders.setSq1(0);SnakesLadders.setSq2(0); }
+        if (sq2 == 100 && SnakesLadders.getPlayer() == 1){ setPlayer(2, 2); SnakesLadders.setSq1(0);SnakesLadders.setSq2(0); return "Game over!";}
+        if (sq2 == 100 && SnakesLadders.getPlayer() == 2){ setPlayer(2, 2); SnakesLadders.setSq1(0);SnakesLadders.setSq2(0); }
+
+        // проверка, какой игрок бросил кости
+        int player = getPlayer();
+        if (player == 1) {
+            int die = die1 + die2 + sq1;
+            if (snake(die)!= die){ sq1 = snake(die); }
+            else if (ladder(die) != die){ sq1 = ladder(die); }
+            else sq1 = die;
+
+            SnakesLadders.setSq1(sq1);
+
+            // проверка на равенство двух значений костей
+            if (die1 == die2) {
+                setPlayer(1, 1);
+            } else setPlayer(1, 2);
+            if (sq1 > 100){sq1 = 100 - (sq1-100); sq1 = snake(sq1); }
+            if (sq1 == 100){ return "Player " + playerold + " Wins!";}
+            else return "Player " + playerold + " is on square " + sq1;
+
+        } else {
+            int die = die1 + die2 + sq2;
+            if (snake(die)!= die){ sq2 = snake(die); }
+            else if (ladder(die) != die){ sq2 = ladder(die); }
+            else sq2 = die;
+
+            SnakesLadders.setSq2(sq2);
+
+            if (die1 == die2) {
+                setPlayer(2, 2);
+            } else setPlayer(2, 1);
+
+            if (sq2 > 100){sq2 = 100 - (sq2-100);sq2 = snake(sq2); }
+            if (sq2 == 100){ return "Player " + playerold + " Wins!";}
+            return "Player " + playerold + " is on square " + sq2;
+        }
+    }
+
+    // проверка логики игры
+    public static void main(String[] args) {
+        SnakesLadders check = new SnakesLadders();
+        System.out.println(check.play(1, 1));
+        System.out.println(check.play(1, 5));
+        System.out.println(check.play(6, 2));
+        System.out.println(check.play(1, 1));
+        System.out.println(check.play(1, 5));
+    }
+}
