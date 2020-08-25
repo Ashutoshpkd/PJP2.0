@@ -1,0 +1,32 @@
+def wheat_from_chaff(values):
+    
+    flagI = False
+    flagJ = False
+    i = 0
+    j = len(values)-1
+    
+    while(j > i):
+        if(values[i] > 0):
+            flagI = True
+        
+        if(values[j] < 0):
+            flagJ = True
+            
+        if(flagI == True and flagJ == True):
+            temp = values[i]
+            values[i] = values[j]
+            values[j] = temp
+            i += 1
+            j -= 1
+            flagI = False
+            flagJ = False
+        
+        elif(flagI == False):
+            i += 1
+        
+        elif(flagJ == False):
+            j -= 1
+            
+    
+    return values
+    
