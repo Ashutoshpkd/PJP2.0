@@ -1,0 +1,8 @@
+1.mvn <name>:help
+
+2. mvn –o clean package
+
+3.mvn war:help --log-file answer.txt
+
+4.mvn dependency:go-offline
+  mvn –o clean package
