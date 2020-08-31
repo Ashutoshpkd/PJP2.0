@@ -1,0 +1,6 @@
+function wordPattern(word,d=new Map()) {
+  return [...word.toLowerCase()].map(c=>{
+    if(!d.has(c)) d.set(c,d.size);
+    return d.get(c);
+  }).join('.');
+}
