@@ -1,0 +1,42 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+public class Johnann {
+	enum Person {
+		JOHN, ANN;
+	}
+
+	private static List<Long> generateLists (Person person, long n) {
+		List<Long> john = new ArrayList<Long>(Collections.singletonList(0L));
+		List<Long> ann = new ArrayList<Long>(Collections.singletonList(1L));
+
+		for (int dayAnn = 1, dayJohn = 1; dayAnn < n || dayJohn < n;) {
+			if (john.size() > ann.get(dayAnn - 1)) {
+				ann.add(dayAnn - john.get(Math.toIntExact(ann.get(dayAnn - 1))));
+				dayAnn++;
+			}
+
+			if (ann.size() > john.get(dayJohn - 1)) {
+				john.add(dayJohn - ann.get(Math.toIntExact(john.get(dayJohn - 1))));
+				dayJohn++;
+			}
+		}
+
+		return (person == Person.JOHN ? john : ann);
+	}
+
+	public static List<Long> john(long n) {
+		return generateLists(Person.JOHN, n - 1);
+	}
+	public static List<Long> ann(long n) {
+		return generateLists(Person.ANN, n);
+	}
+	public static long sumJohn(long n) {
+		return generateLists(Person.JOHN, n - 1).stream().mapToLong(l -> l).sum();
+	}
+	public static long sumAnn(long n) {
+		return generateLists(Person.ANN, n).stream().mapToLong(l -> l).sum();
+	}
+}
